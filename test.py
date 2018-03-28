@@ -45,6 +45,8 @@ def generate_all_cz_to_camp_routes(cz_list, camp_list):
             if status == 'success':
                 print('success')
                 routeLatLons = list(map(router.nodeLatLon, route)) # Get actual route coordinates
+                routeLatLons.insert(0, cz)
+                routeLatLons.append(camp)
                 list_of_routes.append(routeLatLons)
                 print(len(routeLatLons))
             elif status == 'gave_up':
@@ -60,11 +62,15 @@ def extract_nodes(list_of_routes):
     for route in list_of_routes:
         list_of_nodes.append(route[0])
         list_of_nodes.append(route[-1])
-    return list_of_nodes
+    list_of_unique_nodes = []
+    for node in list_of_nodes:
+        if node not in list_of_unique_nodes:
+            list_of_unique_nodes.append(node)
+    return list_of_unique_nodes
 
 
 if __name__ == "__main__":
-    cz_list, camp_list = read_in_nodes('/home/s/sc676/Desktop/locations_2-2.csv')
+    cz_list, camp_list = read_in_nodes('/home/s/sc676/Desktop/locations_sharing.csv')
     print('CZs: ', cz_list)
     print('camps: ', camp_list)
     list_of_routes = generate_all_cz_to_camp_routes(cz_list, camp_list)
